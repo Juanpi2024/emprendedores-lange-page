@@ -426,75 +426,69 @@
         </div>
     </section>
 
-    <!-- Demo Section -->
-    <section id="demo" class="py-24 bg-slate-900 text-white overflow-hidden relative">
+    <!-- Admin Simplicity Section -->
+    <section id="gestion" class="py-24 bg-slate-50 overflow-hidden relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div>
+                <div class="order-2 lg:order-1 relative group">
                     <div
-                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-6">
-                        <i data-lucide="play-circle" class="w-4 h-4"></i>
-                        Demo en Vivo
+                        class="absolute -inset-4 bg-primary/10 rounded-[3rem] blur-2xl group-hover:bg-primary/20 transition-colors">
                     </div>
-                    <h2 class="text-4xl lg:text-5xl font-bold mb-8 tracking-tight">
-                        Experimenta la <span class="text-primary italic">Interfaz del Cliente.</span>
-                    </h2>
-                    <p class="text-slate-400 text-lg mb-10 leading-relaxed">
-                        No solo es una web bonita; es una herramienta funcional. Mira cómo interactúan tus clientes con
-                        el sistema de chat y gestión. Todo conectado en tiempo real a tu Google Sheet.
-                    </p>
-                    <div class="space-y-6">
-                        <div class="flex gap-4">
-                            <div
-                                class="flex-shrink-0 w-10 h-10 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center text-primary">
-                                <i data-lucide="message-square text-sm"></i>
+                    <div class="relative glass p-4 rounded-[3rem] shadow-2xl overflow-hidden">
+                        <img src="admin-preview.png" alt="Panel de Administración Simple"
+                            class="rounded-[2.5rem] w-full h-auto shadow-inner hover:scale-105 transition-transform duration-700">
+                    </div>
+                    <!-- Floating Badge -->
+                    <div class="absolute -top-6 -right-6 glass p-6 rounded-3xl shadow-xl animate-float">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center">
+                                <i data-lucide="mouse-pointer-2"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold mb-1">Chat Integrado</h4>
-                                <p class="text-slate-500 text-sm">Comunicación directa y fluida con tus prospectos.</p>
+                                <p class="text-xs font-bold text-slate-400 uppercase">Gestión</p>
+                                <p class="text-lg font-bold text-slate-900">1 Click</p>
                             </div>
                         </div>
-                        <div class="flex gap-4">
-                            <div
-                                class="flex-shrink-0 w-10 h-10 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center text-primary">
-                                <i data-lucide="zap text-sm"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold mb-1">Respuesta Inmediata</h4>
-                                <p class="text-slate-500 text-sm">Sin demoras, sin fricción en la venta.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-10">
-                        <a href="https://wa.me/your-number"
-                            class="inline-flex items-center gap-2 text-primary font-bold hover:underline">
-                            ¿Quieres un sistema así? Hablemos <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </a>
                     </div>
                 </div>
 
-                <div class="relative group">
+                <div class="order-1 lg:order-2">
                     <div
-                        class="absolute -inset-1 bg-gradient-to-r from-primary to-blue-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000">
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-6">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                        Simplicidad Radical
                     </div>
-                    <div
-                        class="relative bg-black rounded-[2.5rem] p-2 border border-white/10 shadow-2xl overflow-hidden aspect-[9/16] max-w-[320px] mx-auto lg:max-w-none">
-                        <!-- Device Mockup Header -->
-                        <div class="h-6 w-full flex justify-center items-center gap-1.5 mb-2">
-                            <div class="w-12 h-1 rounded-full bg-white/10"></div>
-                        </div>
+                    <h2 class="text-4xl lg:text-5xl font-bold mb-8 tracking-tight text-slate-900">
+                        Tu Panel de Control es <br><span class="text-primary italic">un simple Chat.</span>
+                    </h2>
+                    <p class="text-slate-600 text-lg mb-10 leading-relaxed">
+                        Olvídate de paneles de administración complejos y menús infinitos. Con **Landing IA Express**,
+                        gestionas tu contenido hablando con la IA. Escribe una idea, cambia un precio o sube una oferta
+                        como si estuvieras en WhatsApp.
+                    </p>
 
-                        <!-- The Demo Iframe -->
-                        <iframe
-                            src="https://script.google.com/macros/s/AKfycbzkVBqD9oQxs8Q-4s6DENLWvEurUDPRM72Z8-O1S6ufWaqdoCjutXa_eIUDbHUxj93JoA/exec?p=chat"
-                            class="w-full h-full rounded-[2rem] bg-white border-0" title="Demo Interfaz Cliente"
-                            loading="lazy"></iframe>
-
-                        <!-- Floating Glass Hint -->
-                        <div
-                            class="absolute bottom-10 left-1/2 -translate-x-1/2 glass px-4 py-2 rounded-full text-slate-900 text-xs font-bold animate-pulse pointer-events-none">
-                            Prueba el Chat arriba 👆
+                    <div class="grid sm:grid-cols-2 gap-8">
+                        <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                            <i data-lucide="message-square" class="text-primary mb-4 w-6 h-6"></i>
+                            <h4 class="font-bold mb-2">Cero Curva de Aprendizaje</h4>
+                            <p class="text-slate-500 text-sm">Si sabes chatear, sabes administrar tu propia página web
+                                profesional.</p>
                         </div>
+                        <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                            <i data-lucide="zap" class="text-primary mb-4 w-6 h-6"></i>
+                            <h4 class="font-bold mb-2">IA en Tiempo Real</h4>
+                            <p class="text-slate-500 text-sm">La IA procesa tus pedidos y actualiza la web al instante.
+                                Sin esperas.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 flex items-center gap-6">
+                        <a href="https://script.google.com/macros/s/AKfycbzkVBqD9oQxs8Q-4s6DENLWvEurUDPRM72Z8-O1S6ufWaqdoCjutXa_eIUDbHUxj93JoA/exec?p=chat"
+                            target="_blank" rel="noopener"
+                            class="px-8 py-4 bg-primary text-white rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-xl shadow-primary/30 flex items-center justify-center gap-2">
+                            Probar el Panel ahora
+                            <i data-lucide="external-link" class="w-5 h-5"></i>
+                        </a>
                     </div>
                 </div>
             </div>
