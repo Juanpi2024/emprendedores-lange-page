@@ -1029,8 +1029,8 @@
         Tu tono es profesional, tecnológico, motivador y directo. Si el usuario muestra interés, guíalo a hacer clic en 'Activar Prueba Gratuita' o pregúntale por su negocio para asesorarlo. Responde de forma concisa (máximo 3 párrafos cortos) y usa emojis para ser cercano.`;
 
         async function getGeminiResponse(userText) {
-            // Usamos la versión v1 para mayor estabilidad
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+            // Actualización a Gemini 2.0 para mayor potencia y respuesta en español
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${API_KEY}`;
 
             const body = {
                 contents: [
@@ -1042,12 +1042,7 @@
                         role: "user",
                         parts: [{ text: userText }]
                     }
-                ],
-                generationConfig: {
-                    temperature: 0.7,
-                    topP: 0.8,
-                    maxOutputTokens: 500,
-                }
+                ]
             };
 
             try {
