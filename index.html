@@ -1029,11 +1029,25 @@
         Tu tono es profesional, tecnológico, motivador y directo. Si el usuario muestra interés, guíalo a hacer clic en 'Activar Prueba Gratuita' o pregúntale por su negocio para asesorarlo. Responde de forma concisa (máximo 3 párrafos cortos) y usa emojis para ser cercano.`;
 
         async function getGeminiResponse(userText) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+            // Usamos la versión v1 para mayor estabilidad
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
             const body = {
-                contents: [{
-                    parts: [{ text: SYSTEM_PROMPT + "\n\nUsuario: " + userText }]
-                }]
+                contents: [
+                    {
+                        role: "user",
+                        parts: [{ text: "REGLAS DEL ASISTENTE:\n" + SYSTEM_PROMPT }]
+                    },
+                    {
+                        role: "user",
+                        parts: [{ text: userText }]
+                    }
+                ],
+                generationConfig: {
+                    temperature: 0.7,
+                    topP: 0.8,
+                    maxOutputTokens: 500,
+                }
             };
 
             try {
@@ -1042,11 +1056,25 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
                 });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("API Error Details:", errorData);
+                    throw new Error(errorData.error?.message || "Error en la API");
+                }
+
                 const data = await response.json();
-                return data.candidates[0].content.parts[0].text;
+
+                if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+                    return data.candidates[0].content.parts[0].text;
+                } else {
+                    throw new Error("Respuesta de IA vacía o bloqueada por seguridad.");
+                }
             } catch (error) {
-                console.error("Error calling Gemini:", error);
-                return "¡Hola! Estoy experimentando una alta demanda. ¿Te gustaría que habláramos directamente por WhatsApp para darte una atención personalizada ahora mismo?";
+                console.error("Critical Chat Error:", error);
+                // Si el error es de cuota o llave, devolvemos un mensaje honesto
+                if (error.message.includes("API key")) return "⚠️ Parece que hay un problema con la API Key. Por favor, verifica que esté activa en Google AI Studio.";
+                return "¡Hola! Estoy recibiendo muchas consultas. 🚀 Mientras me estabilizo, ¿te parece si hablamos por WhatsApp para darte una atención personalizada inmediata?";
             }
         }
 
