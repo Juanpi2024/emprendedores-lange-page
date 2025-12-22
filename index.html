@@ -1015,22 +1015,55 @@
             lucide.createIcons();
         }
 
-        // SEGURIDAD: La API_KEY ahora reside en el Backend (Google Apps Script)
-        // La URL de abajo es el endpoint seguro que gestiona la IA
-        const GATEWAY_URL = "https://script.google.com/macros/s/AKfycbxplnj_qnRPJz5XediyqGG5NoZAGyyoRv8bPiDH5YYX0LfIUT-cPhRWR2CFNbY_PqIg/exec";
+        const API_KEY = "AIzaSyBDFcMhCOnjots26SpeD_nuGd_ET9Orn6g";
+        const SYSTEM_PROMPT = `Eres un experto consultor de ventas de Landing IA Express. 
+        Tu objetivo es ayudar a emprendedores a profesionalizar su negocio.
+        Contexto del Proyecto:
+        - Nivel 1: Landing SPA por $2.990 CLP/mes. Económica y rápida.
+        - Nivel 2: GitHub Web Pro por $9.990 CLP/mes. Multi-página, SEO avanzado y mayor autoridad.
+        - Nivel 3: Web Corporativa. Dominio propio (.cl) e infraestructura profesional de alto rendimiento.
+        - Oferta Especial: 7 días GRATIS de prueba para todos los nuevos clientes.
+        - Gestión: Se administra vía chat (como este), sin paneles complejos.
+        - Tecnología: Arquitectura Zero-Cost usando GitHub Pages para máxima velocidad.
+        Tu tono es profesional, tecnológico, motivador y directo. Si el usuario muestra interés, guíalo a hacer clic en 'Activar Prueba Gratuita' o pregúntale por su negocio para asesorarlo. Responde de forma concisa (máximo 3 párrafos cortos) y usa emojis para ser cercano.`;
 
         async function getGeminiResponse(userText) {
-            const url = `${GATEWAY_URL}?action=askGemini&text=${encodeURIComponent(userText)}`;
+            // v2.1 - Forzado de Gemini 2.0 Flash Exp
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${API_KEY}`;
+
+            const body = {
+                contents: [
+                    {
+                        role: "user",
+                        parts: [{ text: "REGLAS DEL ASISTENTE:\n" + SYSTEM_PROMPT }]
+                    },
+                    {
+                        role: "user",
+                        parts: [{ text: userText }]
+                    }
+                ]
+            };
 
             try {
-                const response = await fetch(url);
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
 
                 if (!response.ok) {
-                    throw new Error("Gateway Error");
+                    const errorData = await response.json();
+                    console.error("API Error Details:", errorData);
+                    throw new Error(errorData.error?.message || "Error en la API");
                 }
 
-                const aiResponse = await response.text();
-                return aiResponse;
+                const data = await response.json();
+
+                if (data && data.candidates && data.candidates.length > 0 && data.candidates[0].content) {
+                    return data.candidates[0].content.parts[0].text;
+                } else {
+                    throw new Error("Respuesta de IA vacía o bloqueada por seguridad.");
+                }
             } catch (error) {
                 console.error("Critical Chat Error:", error);
                 // Si el error es de cuota o llave, devolvemos un mensaje honesto
