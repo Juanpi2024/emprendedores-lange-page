@@ -901,7 +901,84 @@
         </div>
     </div>
 
-    <!-- Scripts to initialize Lucide and Modal Logic -->
+    <!-- Sales Agent Bubble -->
+    <div class="fixed bottom-28 right-8 z-[100]">
+        <!-- Chat Window -->
+        <div id="salesChat"
+            class="hidden absolute bottom-20 right-0 w-[350px] sm:w-[400px] bg-white rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col overflow-hidden animate-fade-in-up">
+            <!-- Header -->
+            <div class="p-6 bg-primary text-white flex items-center gap-4">
+                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold">Asistente Experto IA</h4>
+                    <p class="text-xs text-blue-100">En línea ahora · Respuesta instantánea</p>
+                </div>
+                <button onclick="toggleSalesChat()"
+                    class="ml-auto p-2 hover:bg-white/10 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="chatMessages" class="flex-1 p-6 h-[400px] overflow-y-auto space-y-4 bg-slate-50/50">
+                <!-- Initial Message -->
+                <div class="flex gap-3 max-w-[85%]">
+                    <div
+                        class="w-8 h-8 rounded-full bg-primary text-white flex-shrink-0 flex items-center justify-center">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                    </div>
+                    <div class="p-4 bg-white rounded-2xl rounded-tl-none shadow-sm border border-slate-100">
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            ¡Hola! 👋 Soy tu consultor experto de <strong>Landing IA Express</strong>.
+                            <br><br>
+                            ¿Buscas profesionalizar tu negocio hoy? Cuéntame, ¿qué servicios ofreces o qué dudas tienes
+                            sobre nuestros planes?
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Options -->
+            <div class="px-6 pb-2 flex flex-wrap gap-2">
+                <button onclick="handleQuickOption('¿Qué beneficios tiene el Nivel 2?')"
+                    class="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs hover:border-primary hover:text-primary transition-all">Nivel
+                    2: GitHub Web Pro</button>
+                <button onclick="handleQuickOption('¿Cómo funciona la prueba gratuita?')"
+                    class="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs hover:border-primary hover:text-primary transition-all">Prueba
+                    7 Días Gratis</button>
+                <button onclick="handleQuickOption('Ver otros demos reales')"
+                    class="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs hover:border-primary hover:text-primary transition-all">Ver
+                    Demos</button>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 bg-white border-t border-slate-100 flex gap-2">
+                <input type="text" id="chatInput" placeholder="Escribe tu duda aquí..."
+                    class="flex-1 px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none text-sm transittion-all"
+                    onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button onclick="sendMessage()"
+                    class="p-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition-all shadow-lg shadow-primary/20">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button onclick="toggleSalesChat()"
+            class="relative w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform group">
+            <i data-lucide="sparkles" class="w-8 h-8 fill-white"></i>
+            <span class="absolute -top-2 -right-2 w-5 h-5 bg-green-500 border-4 border-white rounded-full"></span>
+            <!-- Label tooltip -->
+            <span
+                class="absolute right-20 bg-white text-slate-900 px-4 py-2 rounded-xl text-sm font-bold shadow-xl border border-slate-100 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                ¡Hablemos de tu proyecto! ✨
+            </span>
+        </button>
+    </div>
+
+    <!-- Scripts -->
     <script>
         lucide.createIcons();
 
@@ -915,23 +992,87 @@
             document.body.style.overflow = 'auto';
         }
 
+        function toggleSalesChat() {
+            const chat = document.getElementById('salesChat');
+            chat.classList.toggle('hidden');
+            if (!chat.classList.contains('hidden')) {
+                document.getElementById('chatInput').focus();
+            }
+        }
+
+        function appendMessage(role, text) {
+            const container = document.getElementById('chatMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = role === 'user' ? 'flex justify-end' : 'flex gap-3 max-w-[85%]';
+
+            const content = role === 'user'
+                ? `<div class="p-4 bg-primary text-white rounded-2xl rounded-tr-none shadow-sm text-sm">${text}</div>`
+                : `<div class="w-8 h-8 rounded-full bg-primary text-white flex-shrink-0 flex items-center justify-center"><i data-lucide="bot" class="w-4 h-4"></i></div>
+                   <div class="p-4 bg-white rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-sm text-slate-700 leading-relaxed">${text}</div>`;
+
+            msgDiv.innerHTML = content;
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+            lucide.createIcons();
+        }
+
+        const salesKnowledge = {
+            "beneficios": "Nuestros sitios están diseñados para vender. 🚀 Beneficios: 1. Costo Cero de hosting inicial. 2. Velocidad extrema (<1s). 3. Gestión por chat (sin cpanel). 4. Estrategia de conversión probada.",
+            "nivel2": "El Nivel 2 (GitHub Web Pro) es nuestro producto estrella ⭐. Incluye SEO técnico avanzado, arquitectura multi-página profesional y total libertad de diseño. ¡Todo por solo $9.990 al mes!",
+            "prueba": "¡Claro! Ofrecemos 7 días de prueba GRATIS 🎁. Armamos tu web, la ves funcionando, y si te gusta, activas tu suscripción. Sin tarjetas de crédito, solo confianza.",
+            "demo": "Puedes ver nuestros demos en la sección de 'Modelos'. Tenemos para Veterinaria, Servicios Técnicos y Kinesiología. Todos 100% funcionales.",
+            "precio": "El Nivel 1 cuesta solo $2.990 CLP al mes (¡menos que un café! ☕). El Nivel 2 cuesta $9.990 CLP al mes para quienes buscan crecer rápido.",
+            "default": "¡Excelente punto! 🎯 Lo mejor es que hablemos sobre tu negocio específico. ¿Te gustaría que te contactara un asesor humano por WhatsApp para iniciar tus 7 días gratis?"
+        };
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            appendMessage('user', text);
+            input.value = '';
+
+            // Simple AI Logic
+            setTimeout(() => {
+                let response = salesKnowledge.default;
+                const lowerText = text.toLowerCase();
+
+                if (lowerText.includes('beneficio')) response = salesKnowledge.beneficios;
+                else if (lowerText.includes('nivel 2') || lowerText.includes('github')) response = salesKnowledge.nivel2;
+                else if (lowerText.includes('prueba') || lowerText.includes('gratis')) response = salesKnowledge.prueba;
+                else if (lowerText.includes('demo') || lowerText.includes('ejemplo')) response = salesKnowledge.demo;
+                else if (lowerText.includes('precio') || lowerText.includes('cuánto')) response = salesKnowledge.precio;
+
+                appendMessage('bot', response);
+            }, 600);
+        }
+
+        function handleQuickOption(text) {
+            appendMessage('user', text);
+            sendMessageLogic(text);
+        }
+
+        function sendMessageLogic(text) {
+            setTimeout(() => {
+                let response = salesKnowledge.default;
+                const lowerText = text.toLowerCase();
+                if (lowerText.includes('beneficio')) response = salesKnowledge.beneficios;
+                else if (lowerText.includes('nivel 2')) response = salesKnowledge.nivel2;
+                else if (lowerText.includes('prueba')) response = salesKnowledge.prueba;
+                else if (lowerText.includes('demo')) response = salesKnowledge.demo;
+                appendMessage('bot', response);
+            }, 600);
+        }
+
         document.getElementById('trialForm').addEventListener('submit', function (e) {
             e.preventDefault();
-
             const name = document.getElementById('bizName').value;
             const phone = document.getElementById('bizPhone').value;
             const history = document.getElementById('bizHistory').value;
             const services = document.getElementById('bizServices').value;
             const social = document.getElementById('bizSocial').value;
-
-            const text = `🚀 SOLICITUD DE PRUEBA 7 DÍAS - LANDING IA EXPRESS\n\n` +
-                `*Nombre:* ${name}\n` +
-                `*Teléfono:* ${phone}\n` +
-                `*Historia:* ${history}\n` +
-                `*Servicios:* ${services}\n` +
-                `*Redes:* ${social}\n\n` +
-                `Quedo atento a enviar el logo y las imágenes por aquí.`;
-
+            const text = `🚀 SOLICITUD DE PRUEBA 7 DÍAS - LANDING IA EXPRESS\n\n*Nombre:* ${name}\n*Teléfono:* ${phone}\n*Historia:* ${history}\n*Servicios:* ${services}\n*Redes:* ${social}\n\nQuedo atento a enviar el logo y las imágenes por aquí.`;
             const waLink = `https://wa.me/56930515152?text=${encodeURIComponent(text)}`;
             window.open(waLink, '_blank');
             closeTrialModal();
