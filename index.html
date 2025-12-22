@@ -119,13 +119,13 @@
                         Chat.
                     </p>
                     <div class="flex flex-col sm:flex-row items-center gap-4">
-                        <a href="https://wa.me/your-number"
-                            class="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-xl shadow-primary/30 flex items-center justify-center gap-2 group">
+                        <button onclick="openTrialModal()"
+                            class="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-xl shadow-primary/30 flex items-center justify-center gap-2 group cursor-pointer">
                             <i data-lucide="zap" class="w-5 h-5 fill-white"></i>
                             Empezar 7 Días GRATIS
                             <i data-lucide="arrow-right"
                                 class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
-                        </a>
+                        </button>
                         <a href="#solucion"
                             class="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
                             Ver cómo funciona
@@ -755,10 +755,10 @@
                         </li>
                     </ul>
 
-                    <a href="https://wa.me/your-number"
-                        class="block w-full py-4 text-center bg-primary text-white rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-xl shadow-primary/25">
+                    <button onclick="openTrialModal()"
+                        class="block w-full py-4 text-center bg-primary text-white rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-xl shadow-primary/25 cursor-pointer">
                         Activar Prueba Gratuita
-                    </a>
+                    </button>
 
                     <!-- Decorative background -->
                     <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-primary/5 rounded-full"></div>
@@ -819,20 +819,123 @@
         </div>
     </footer>
 
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/your-number"
-        class="fixed bottom-8 right-8 w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform z-[100] group animate-float">
-        <i data-lucide="message-circle" class="w-8 h-8 fill-current"></i>
-        <!-- Tooltip -->
-        <span
-            class="absolute right-20 bg-white text-slate-900 px-4 py-2 rounded-xl text-sm font-bold shadow-xl border border-slate-100 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            ¿Hablamos por WhatsApp? 👋
-        </span>
-    </a>
+    <!-- Trial Modal -->
+    <div id="trialModal" class="fixed inset-0 z-[150] hidden">
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeTrialModal()"></div>
 
-    <!-- Scripts to initialize Lucide -->
+        <!-- Modal Content -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl p-4">
+            <div
+                class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 animate-fade-in-up">
+                <div class="p-8 sm:p-10">
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-900">Activa tu Prueba de 7 Días</h3>
+                            <p class="text-slate-500 mt-2">Danos los detalles básicos para crear tu landing hoy mismo.
+                            </p>
+                        </div>
+                        <button onclick="closeTrialModal()" class="text-slate-400 hover:text-slate-600 p-2">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+
+                    <form id="trialForm" class="space-y-5">
+                        <div class="grid sm:grid-cols-2 gap-5">
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Nombre
+                                    del Negocio</label>
+                                <input type="text" id="bizName" required placeholder="Ej: Veterinaria San Juan"
+                                    class="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm">
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">WhatsApp
+                                    / Teléfono</label>
+                                <input type="tel" id="bizPhone" required placeholder="+56 9 1234 5678"
+                                    class="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Historia /
+                                Descripción corta</label>
+                            <textarea id="bizHistory" rows="2" placeholder="Cuéntanos un poco sobre lo que haces..."
+                                class="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm"></textarea>
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Servicios
+                                Principales</label>
+                            <input type="text" id="bizServices" placeholder="Ej: Consultas, Cirugías, Peluquería"
+                                class="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Redes
+                                Sociales (Si tiene)</label>
+                            <input type="text" id="bizSocial" placeholder="Instagram o Facebook"
+                                class="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm">
+                        </div>
+
+                        <div class="p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                            <p class="text-xs text-primary font-medium flex gap-2">
+                                <i data-lucide="info" class="w-4 h-4"></i>
+                                Importante: El logo y la imagen de fondo los pediremos por WhatsApp al activar la
+                                prueba.
+                            </p>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-4 bg-primary text-white rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-xl shadow-primary/25 flex items-center justify-center gap-2 group">
+                            Enviar y Empezar Prueba
+                            <i data-lucide="send"
+                                class="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts to initialize Lucide and Modal Logic -->
     <script>
         lucide.createIcons();
+
+        function openTrialModal() {
+            document.getElementById('trialModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTrialModal() {
+            document.getElementById('trialModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('trialForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('bizName').value;
+            const phone = document.getElementById('bizPhone').value;
+            const history = document.getElementById('bizHistory').value;
+            const services = document.getElementById('bizServices').value;
+            const social = document.getElementById('bizSocial').value;
+
+            const text = `🚀 SOLICITUD DE PRUEBA 7 DÍAS - LANDING IA EXPRESS\n\n` +
+                `*Nombre:* ${name}\n` +
+                `*Teléfono:* ${phone}\n` +
+                `*Historia:* ${history}\n` +
+                `*Servicios:* ${services}\n` +
+                `*Redes:* ${social}\n\n` +
+                `Quedo atento a enviar el logo y las imágenes por aquí.`;
+
+            const waLink = `https://wa.me/56930515152?text=${encodeURIComponent(text)}`;
+            window.open(waLink, '_blank');
+            closeTrialModal();
+        });
     </script>
 </body>
 
