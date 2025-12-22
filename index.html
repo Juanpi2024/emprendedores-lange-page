@@ -1016,53 +1016,66 @@
             lucide.createIcons();
         }
 
-        const salesKnowledge = {
-            "beneficios": "Nuestros sitios están diseñados para vender. 🚀 Beneficios: 1. Costo Cero de hosting inicial. 2. Velocidad extrema (<1s). 3. Gestión por chat (sin cpanel). 4. Estrategia de conversión probada.",
-            "nivel2": "El Nivel 2 (GitHub Web Pro) es nuestro producto estrella ⭐. Incluye SEO técnico avanzado, arquitectura multi-página profesional y total libertad de diseño. ¡Todo por solo $9.990 al mes!",
-            "prueba": "¡Claro! Ofrecemos 7 días de prueba GRATIS 🎁. Armamos tu web, la ves funcionando, y si te gusta, activas tu suscripción. Sin tarjetas de crédito, solo confianza.",
-            "demo": "Puedes ver nuestros demos en la sección de 'Modelos'. Tenemos para Veterinaria, Servicios Técnicos y Kinesiología. Todos 100% funcionales.",
-            "precio": "El Nivel 1 cuesta solo $2.990 CLP al mes (¡menos que un café! ☕). El Nivel 2 cuesta $9.990 CLP al mes para quienes buscan crecer rápido.",
-            "default": "¡Excelente punto! 🎯 Lo mejor es que hablemos sobre tu negocio específico. ¿Te gustaría que te contactara un asesor humano por WhatsApp para iniciar tus 7 días gratis?"
-        };
+        const API_KEY = "AIzaSyCN5N6seKb66Nry6tEDVaOEFLOGrvdNheY";
+        const SYSTEM_PROMPT = `Eres un experto consultor de ventas de Landing IA Express. 
+        Tu objetivo es ayudar a emprendedores a profesionalizar su negocio.
+        Contexto del Proyecto:
+        - Nivel 1: Landing SPA por $2.990 CLP/mes. Económica y rápida.
+        - Nivel 2: GitHub Web Pro por $9.990 CLP/mes. Multi-página, SEO avanzado y mayor autoridad.
+        - Nivel 3: Web Corporativa. Dominio propio (.cl) e infraestructura profesional de alto rendimiento.
+        - Oferta Especial: 7 días GRATIS de prueba para todos los nuevos clientes.
+        - Gestión: Se administra vía chat (como este), sin paneles complejos.
+        - Tecnología: Arquitectura Zero-Cost usando GitHub Pages para máxima velocidad.
+        Tu tono es profesional, tecnológico, motivador y directo. Si el usuario muestra interés, guíalo a hacer clic en 'Activar Prueba Gratuita' o pregúntale por su negocio para asesorarlo. Responde de forma concisa (máximo 3 párrafos cortos) y usa emojis para ser cercano.`;
 
-        function sendMessage() {
+        async function getGeminiResponse(userText) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+            const body = {
+                contents: [{
+                    parts: [{ text: SYSTEM_PROMPT + "\n\nUsuario: " + userText }]
+                }]
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text;
+            } catch (error) {
+                console.error("Error calling Gemini:", error);
+                return "¡Hola! Estoy experimentando una alta demanda. ¿Te gustaría que habláramos directamente por WhatsApp para darte una atención personalizada ahora mismo?";
+            }
+        }
+
+        async function sendMessage(overrideText = null) {
             const input = document.getElementById('chatInput');
-            const text = input.value.trim();
+            const text = overrideText || input.value.trim();
             if (!text) return;
 
             appendMessage('user', text);
-            input.value = '';
+            if (!overrideText) input.value = '';
 
-            // Simple AI Logic
-            setTimeout(() => {
-                let response = salesKnowledge.default;
-                const lowerText = text.toLowerCase();
+            // Loading state
+            const loadingId = 'loading-' + Date.now();
+            const container = document.getElementById('chatMessages');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = loadingId;
+            loadingDiv.className = 'flex gap-3 max-w-[85%] animate-pulse';
+            loadingDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-slate-200 flex-shrink-0"></div><div class="p-4 bg-slate-100 rounded-2xl rounded-tl-none text-slate-400 text-xs italic">Escribiendo...</div>`;
+            container.appendChild(loadingDiv);
+            container.scrollTop = container.scrollHeight;
 
-                if (lowerText.includes('beneficio')) response = salesKnowledge.beneficios;
-                else if (lowerText.includes('nivel 2') || lowerText.includes('github')) response = salesKnowledge.nivel2;
-                else if (lowerText.includes('prueba') || lowerText.includes('gratis')) response = salesKnowledge.prueba;
-                else if (lowerText.includes('demo') || lowerText.includes('ejemplo')) response = salesKnowledge.demo;
-                else if (lowerText.includes('precio') || lowerText.includes('cuánto')) response = salesKnowledge.precio;
+            const aiResponse = await getGeminiResponse(text);
 
-                appendMessage('bot', response);
-            }, 600);
+            document.getElementById(loadingId).remove();
+            appendMessage('bot', aiResponse);
         }
 
         function handleQuickOption(text) {
-            appendMessage('user', text);
-            sendMessageLogic(text);
-        }
-
-        function sendMessageLogic(text) {
-            setTimeout(() => {
-                let response = salesKnowledge.default;
-                const lowerText = text.toLowerCase();
-                if (lowerText.includes('beneficio')) response = salesKnowledge.beneficios;
-                else if (lowerText.includes('nivel 2')) response = salesKnowledge.nivel2;
-                else if (lowerText.includes('prueba')) response = salesKnowledge.prueba;
-                else if (lowerText.includes('demo')) response = salesKnowledge.demo;
-                appendMessage('bot', response);
-            }, 600);
+            sendMessage(text);
         }
 
         document.getElementById('trialForm').addEventListener('submit', function (e) {
